@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:56122b7f5df2ac089209ec90525fff5a2868362f7f46d62859064954af743cd6
-size 215
+# --- Large Assets (Keep these as LFS) ---
+*.lib filter=lfs diff=lfs merge=lfs -text
+*.dll filter=lfs diff=lfs merge=lfs -text
+
+# --- WebGL Safety Rules (FORCE these to be standard files) ---
+# This overrides any previous LFS settings for your build
+*.wasm !filter !diff !merge binary
+*.data !filter !diff !merge binary
+*.js   text
