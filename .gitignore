@@ -66,6 +66,7 @@ sysinfo.txt
 # Mono auto generated files
 mono_crash.*
 
+# Build
 # Builds
 *.apk
 *.aab
