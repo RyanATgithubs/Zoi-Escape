@@ -3,35 +3,93 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | Zoi_Escape</title>
+    <title>Zoi Escape | Official Web Port</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    
+    <style>
+      /* 1. RESET & BASIC SETUP */
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents scrollbars */
+        background-color: #1a1a1a; /* Dark Grey Background */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      /* 2. FLEXBOX CENTERING (The "Normal Website" Feel) */
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      /* 3. THE GAME CONTAINER (Dynamic Window) */
+      #unity-container {
+        position: relative;
+        width: 90%;            /* Take up 90% of the screen width */
+        max-width: 1280px;     /* But stop growing at 1280px (Cap size) */
+        aspect-ratio: 16 / 9;  /* FORCE 16:9 Aspect Ratio (Prevents stretching) */
+        background: #000;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5); /* Nice drop shadow */
+        border-radius: 8px;    /* Rounded corners */
+      }
+
+      /* 4. THE CANVAS (Fill the container) */
+      #unity-canvas {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        display: block;
+      }
+
+      /* 5. LOADING BAR & UI */
+      #unity-loading-bar { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none; }
+      #unity-logo { width: 154px; height: 130px; background: url('TemplateData/unity-logo-dark.png') no-repeat center; }
+      #unity-progress-bar-empty { width: 141px; height: 18px; margin-top: 10px; margin-left: 6.5px; background: url('TemplateData/progress-bar-empty-dark.png') no-repeat center; }
+      #unity-progress-bar-full { width: 0%; height: 18px; margin-top: 10px; background: url('TemplateData/progress-bar-full-dark.png') no-repeat center; }
+      
+      /* Footer UI (Optional - hidden in fullscreen) */
+      #unity-footer {
+        position: absolute;
+        bottom: -40px;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        color: #888;
+        font-size: 12px;
+      }
+      .unity-mobile #unity-footer { display: none; }
+    </style>
   </head>
+  
   <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+    <div id="unity-container">
+      <canvas id="unity-canvas" tabindex="-1"></canvas>
+      
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
-      <div id="unity-warning"> </div>
+      
+      <div id="unity-warning"></div>
+
       <div id="unity-footer">
-        <div id="unity-logo-title-footer"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Zoi_Escape</div>
+        <div id="unity-build-title">Zoi_Escape v1.0</div>
+        <div id="unity-fullscreen-button" style="cursor: pointer; text-decoration: underline;">Full Screen</div>
       </div>
     </div>
+
     <script>
       var canvas = document.querySelector("#unity-canvas");
 
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
+      // BANNER SYSTEM
       function unityShowBanner(msg, type) {
         var warningBanner = document.querySelector("#unity-warning");
         function updateBannerVisibility() {
@@ -51,6 +109,8 @@
         updateBannerVisibility();
       }
 
+      // --- CONFIGURATION ---
+      // Note: We keep the .unityweb extension as per your provided file
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/Zoi-Escape.loader.js";
       var config = {
@@ -63,71 +123,45 @@
         productName: "Zoi_Escape",
         productVersion: "1.0",
         showBanner: unityShowBanner,
-        // errorHandler: function(err, url, line) {
-        //    alert("error " + err + " occurred at line " + line);
-        //    // Return 'true' if you handled this error and don't want Unity
-        //    // to process it further, 'false' otherwise.
-        //    return true;
-        // },
       };
 
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
-
+      // --- DEVICE DETECTION & RESPONSIVENESS ---
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-
+        // Mobile: Force Fullscreen Meta Tag
         var meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
         document.getElementsByTagName('head')[0].appendChild(meta);
         document.querySelector("#unity-container").className = "unity-mobile";
-        canvas.className = "unity-mobile";
-
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
+        
+        // Mobile optimization (optional)
         // config.devicePixelRatio = 1;
-
-
       } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
+        // Desktop: WE REMOVED THE HARDCODED PIXELS HERE
+        // The CSS handles the width/height now.
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
 
+      // --- LOAD THE GAME ---
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
           document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                document.querySelector("#unity-loading-bar").style.display = "none";
-                document.querySelector("#unity-fullscreen-button").onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-
-              }).catch((message) => {
-                alert(message);
-              });
-            };
+        }).then((unityInstance) => {
+          document.querySelector("#unity-loading-bar").style.display = "none";
+          
+          // Fullscreen Button Logic
+          document.querySelector("#unity-fullscreen-button").onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
 
       document.body.appendChild(script);
-
     </script>
   </body>
 </html>
