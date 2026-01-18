@@ -2,7 +2,7 @@
 // Adjust this path to point to where your 'unity-build' folder is relative to this HTML file.
 var buildPath = "../../unity-build/Build"; 
 
-var loaderUrl = buildPath + "/Zoi-Escape.loader.js";
+var loaderUrl = buildPath + "/unity-build.loader.js";
 
 // 2. DOM ELEMENTS
 var canvas = document.querySelector("#unity-canvas");
@@ -32,9 +32,9 @@ function unityShowBanner(msg, type) {
 
 // 4. UNITY CONFIGURATION
 var config = {
-    dataUrl: buildPath + "/Zoi-Escape.data.unityweb",
-    frameworkUrl: buildPath + "/Zoi-Escape.framework.js.unityweb",
-    codeUrl: buildPath + "/Zoi-Escape.wasm.unityweb",
+    dataUrl: buildPath + "/unity-build.data.unityweb",
+    frameworkUrl: buildPath + "/unity-build.framework.js.unityweb",
+    codeUrl: buildPath + "/unity-build.wasm.unityweb",
     streamingAssetsUrl: "StreamingAssets",
     companyName: "DefaultCompany",
     productName: "Zoi_Escape",
