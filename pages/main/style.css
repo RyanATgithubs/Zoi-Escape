@@ -1,0 +1,150 @@
+/* --- Global & Resets --- */
+* {
+    width: 100%;          /* limit to viewport width */
+    max-width: 100%;  
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: sans-serif; /* Added for better default rendering */
+    background-color: white;
+}
+
+/* --- Navigation (Parent) --- */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Changed from 100vw to avoid potential scrollbar overlap */
+    height: fit-content;
+    max-height: 100px;
+    padding: 20px 100px;
+    background-color: black;
+    
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    row-gap: 20px;
+    align-items: center;
+    z-index: 1000; /* Ensures nav stays on top */
+}
+
+/* --- Navigation Children --- */
+
+/* 1. Logo (Direct child of nav) */
+nav > a {
+    color: darkgray;
+    font-size: 32px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* 2. Menu List (Container) */
+nav ul {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    list-style: none;
+}
+
+/* 3. Menu Links */
+nav ul a {
+    /* Keep your existing styles */
+    color: darkgray;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 15px;
+    transition: 0.2s ease;
+
+    /* --- THE FIXES --- */
+    
+    /* 1. Force Single Line */
+    white-space: nowrap;      /* "Make text stay on a single line as much as possible" */
+    
+    /* 2. Alignment Architecture */
+    display: flex;            /* Turns the link itself into a flexbox to align its text */
+    align-items: center;      /* Vertically centers text */
+    justify-content: center;  /* Horizontally centers text */
+    text-align: center;       /* Ensures text is centered if it ever wraps */
+}
+
+nav ul a:hover {
+    background-color: darkgray;
+    color: white;
+}
+
+/* --- Content Sections --- */
+section {
+    padding: 150px 150px 0 150px;
+}
+
+h1 {
+    font-size: 50px;
+}
+
+p {
+    margin-top: 10px;
+    color: darkgray; /* Standardized spelling */
+    line-height: 25px; /* Fixed typo: was 'list-style' */
+}
+
+/* --- Mobile / Tablet Overrides --- */
+@media (max-width: 768px) {
+    /* Modify Parent Nav for Sidebar */
+    nav {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: fit-content; /* Fixed width to match body margin */
+        height: auto;
+        max-height: none; /* Remove desktop restriction */
+        padding: 20px;
+        
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch; /* Stretch children to fill width */
+    }
+
+    /* Modify Logo */
+    nav > a {
+        padding: 15px;
+        border-bottom: 1px solid #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Modify List Container */
+    nav ul {
+        flex-direction: column;
+        gap: 0; /* Remove gap, use padding/borders instead */
+        width: 100%;
+    }
+
+    /* Modify List Items */
+    nav ul li {
+        width: 100%;
+    }
+
+    /* Modify List Links */
+    nav ul a {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        border-bottom: 1px solid #333;
+        text-align: left;
+    }
+
+    /* Adjust Body Content */
+    body {
+        margin-left: 200px; /* Push content to right of sidebar */
+    }
+    
+    section {
+        padding: 40px; /* Reduce padding for smaller screens */
+    
+    }
+}

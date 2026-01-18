@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../main/style.css">
+    <link rel="stylesheet" href="play.css">
+    <link rel="stylesheet" href="../../unity-build/Templatedata/unity-style.css">
+    <link rel="stylesheet" href="leaderboard_ToRefactor.css">
+    <title>Zoi: Escape</title>
+</head>
+<body>
+    <script src="leaderboard.js" defer></script>
+    <nav>
+        <a href="../../index.html">Home</a>
+        <ul>
+            <li><a href="../story/story.html">Story</a></li>
+            <li><a href="../char-info/char-info.html">Character Information</a></li>
+            <li><a href="play.html">Play</a></li>
+            <li><a href="../about/abt-dev.html">About the Developer</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <h1>Play</h1>
+        
+        <div class="main">
+            <div class="leaderboard">
+                <div class="leaderboard-header">
+                    <div class="col rank">Rank</div>
+                    <div class="col name">Player Name</div>
+                    <div class="col time">Time</div>
+                    <div class="col kills">Kills</div>
+                    <div class="col kpm">KPM</div>
+                    <button id="toggle-button">▼</button>
+                </div>
+                <ol class="leaderboard-body"></ol>
+            </div>
+
+            <div class="google-signin"></div>
+
+            <div class="unity-container">
+                <canvas id="unity-canvas"></canvas>
+                
+                <div id="unity-loading-bar">
+                    <div id="unity-logo"></div>
+                    <div id="unity-progress-bar-empty">
+                        <div id="unity-progress-bar-full"></div>
+                    </div>
+                </div>
+
+                <div id="unity-warning"></div>
+
+                <div id="unity-footer">
+                    <button id="full-screen-bttn">Expand</button> 
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="game-loader.js"></script> 
+</body>
+</html>
