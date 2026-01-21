@@ -8,14 +8,16 @@ const redirectURI = "https://ryanatgithubs.github.io/Zoi-Escape/pages/security/a
 // AUTHENTICATION
 const signinWindow = document.querySelector(".signin-window");
 const signinBttn = document.getElementById("google-signin-button");
-const authOverlay = document.getElementById("auth-overlay");
+const cancelSigninBttn = document.getElementById("cancel-signin-button");
+
+const unityContainer = document.getElementById("unity-container");
 
 let googleAuthPopup = null;
 
 signinBttn.addEventListener("click", StartGoogleSignIn);
+cancelSigninBttn.addEventListener("click", CancelSignin);
 
 function StartGoogleSignIn() {
-	authOverlay.style.display = "flex";
 
 	const authURL = `${authURI}` +
 					`?client_id=${clientID}` +
@@ -27,62 +29,41 @@ function StartGoogleSignIn() {
 }
 
 function OnSigninSuccess() {
-	if (googleAuthPopup) googleAuthPopup.close();
-	signinWindow.style.display = "none";
-	authOverlay.style.display = "none";
-	loadGame();
+	openSigninWindow(false);
+	openGameWindow();
 }
 
 function OnSignOut() {
-	signinWindow.style.display = "block";
+	openSigninWindow(true);
+	closeGameWindow();
 }
 
 function CancelSignin() {
 	if (googleAuthPopup) googleAuthPopup.close();
-	if (signinWindow === null) console.log("signin window is null");
-	authOverlay.style.display = "none";
-	signinWindow.style.display = "block";
+	openSigninWindow(true);
 }
 
 window.addEventListener("message", (event) => {
-	if (event.data.type = "GOOGLE_AUTH_SUCCESS") {
+	if (event.data.type === "GOOGLE_AUTH_SUCCESS") {
 		OnSigninSuccess();
 		console.log("Signin success");
 	}
 }, false);
 
+function openSigninWindow(isOpen) {
+	signinWindow.style.display = isOpen ? "block" : "none";
+}
+
 /////////
 // UNITY
-const unityCanvas = `
-				<canvas id="unity-canvas"></canvas>
-                <div id="unity-loading-bar">
-                    <div id="unity-logo"></div>
-                    <div id="unity-progress-bar-empty">
-                        <div id="unity-progress-bar-full"></div>
-                    </div>
-                </div>
+import { loadGame, unloadGame } from "./game-loader.js";
 
-                <div id="unity-warning"></div>
-
-                <div id="unity-footer">
-                    <button id="full-screen-bttn">Expand</button> 
-                </div>
-				<script src="game-loader.js" defer></script>
-				`;
-
-const unityContainer = document.getElementById("unity-container");
-
-function createHtmlElement(html) {
-	const template = document.createElement("template");
-	template.innerHTML = html.trim();
-	return template.content;
+function openGameWindow() {
+	unityContainer.style.display = "flex";
+	loadGame();
 }
- 
-function loadGame() {
-	unityContainer.appendChild(createHtmlElement(unityCanvas));
 
-	const gameLoader = document.createElement("script");
-	gameLoader.src = "game-loader.js";
-	gameLoader.defer = true;
-	document.body.appendChild(gameLoader);
+async function closeGameWindow() {
+	await unloadGame(); // Wait the unity finish unloading;
+	unityContainer.style.display = "none";
 }

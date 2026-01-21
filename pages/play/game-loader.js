@@ -1,17 +1,19 @@
-// 1. PATH CONFIGURATION
-// Adjust this path to point to where your 'unity-build' folder is relative to this HTML file.
-var buildPath = "../../unity-build/Build"; 
+// 1. Initialize
+let unityInstance = null;
+let loaderScript = null;
 
+// 2. PATH CONFIGURATION
+var buildPath = "../../unity-build/Build"; 
 var loaderUrl = buildPath + "/unity-build.loader.js";
 
-// 2. DOM ELEMENTS
+// 3. DOM ELEMENTS
 var canvas = document.querySelector("#unity-canvas");
 var loadingBar = document.querySelector("#unity-loading-bar");
 var progressBarFull = document.querySelector("#unity-progress-bar-full");
 var fullScreenButton = document.querySelector("#full-screen-bttn");
 var warningBanner = document.querySelector("#unity-warning");
 
-// 3. ERROR BANNER FUNCTION
+// 4. ERROR BANNER FUNCTION
 function unityShowBanner(msg, type) {
     function updateBannerVisibility() {
         warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
@@ -30,8 +32,8 @@ function unityShowBanner(msg, type) {
     updateBannerVisibility();
 }
 
-// 4. UNITY CONFIGURATION
-var config = {
+// 5. UNITY CONFIGURATION
+const config = {
     dataUrl: buildPath + "/unity-build.data.unityweb",
     frameworkUrl: buildPath + "/unity-build.framework.js.unityweb",
     codeUrl: buildPath + "/unity-build.wasm.unityweb",
@@ -47,29 +49,48 @@ var config = {
     },
 };
 
-// 5. LOAD THE GAME
-// Show the loading bar immediately
-loadingBar.style.display = "block";
+// 6. LOAD THE GAME
+export function loadGame() {
+    if (unityInstance) return;
+    loadingBar.style.display = "block";
 
-var script = document.createElement("script");
-script.src = loaderUrl;
-script.onload = () => {
-    createUnityInstance(canvas, config, (progress) => {
-        // Update the width of the blue bar
-        progressBarFull.style.width = 100 * progress + "%";
-    })
-    .then((unityInstance) => {
-        // GAME LOADED SUCCESS
-        loadingBar.style.display = "none";
-        
-        // Activate the Full Screen Button
-        fullScreenButton.onclick = () => {
-            unityInstance.SetFullscreen(1);
-        };
-    })
-    .catch((message) => {
-        alert(message);
-    });
-};
+    loaderScript = document.createElement("script");
+    loaderScript.src = loaderUrl;
+    loaderScript.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+            // Update the width of the blue bar
+            progressBarFull.style.width = 100 * progress + "%";
+        })
+        .then((instance) => {
+            unityInstance = instance;
+            // GAME LOADED SUCCESS
+            loadingBar.style.display = "none";
+            
+            // Activate the Full Screen Button
+            fullScreenButton.onclick = () => {
+                unityInstance.SetFullscreen(1);
+            };
+        })
+        .catch((message) => {
+            alert(message);
+        });
+    };
 
-document.body.appendChild(script);
+    document.body.appendChild(loaderScript);
+
+    console.log("loaded the game successfully!");
+}
+
+export async function unloadGame() {
+    if (!unityInstance) return;
+
+    await unityInstance.Quit();
+
+    unityInstance = null;
+    if (loaderScript) {
+        loaderScript.remove();
+        loaderScript = null;
+    }
+
+    console.log("unloaded the game successfully!");
+}

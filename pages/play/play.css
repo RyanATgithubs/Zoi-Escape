@@ -21,7 +21,7 @@
 #unity-container {
     flex: 1 1 auto;
     background-color: yellow;
-    display: flex;
+    display: none;
     flex-direction: column;
     width: 100%;
 }

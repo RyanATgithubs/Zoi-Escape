@@ -28,7 +28,6 @@ const playerRankList = [
 ];
 
 function loadLeaderboard() {
-	console.log("add row button clicked!");
 	playerRankList.forEach(function(rankData) {
 		addPlayerRow(
 			rankData.rank, 
@@ -55,7 +54,6 @@ function addPlayerRow(rank, playerName, time, kills, kmp) {
 }
 
 window.onload = function() {
-	console.log("Caching leaderboard data from firebase!");
 	loadLeaderboard();
 };
 

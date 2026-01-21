@@ -40,18 +40,28 @@
 
             <div class="signin-window">
                 <button id="google-signin-button">Google SignIn</button>
-                <div id="auth-overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10; justify-content: center; align-items: center; flex-direction: column; color: white; font-family: sans-serif;">
-                    <div style="font-size: 24px; margin-bottom: 20px;">Logging you in...</div>
-                    <div class="loader"></div> <button onclick="CancelSignin()" style="margin-top: 20px; padding: 10px 20px; cursor: pointer;">Cancel</button>
-                </div>
+                <button id="cancel-signin-button">Cancel</button>
             </div>
 
-            <div id="unity-container">
+            <div id="unity-container" display="none">
+                <canvas id="unity-canvas"></canvas>
+                <div id="unity-loading-bar">
+                    <div id="unity-logo"></div>
+                    <div id="unity-progress-bar-empty">
+                        <div id="unity-progress-bar-full"></div>
+                    </div>
+                </div>
+
+                <div id="unity-warning"></div>
+
+                <div id="unity-footer">
+                    <button id="full-screen-bttn">Expand</button> 
+                </div>
             </div>
 
         </div>
     </section>
 
-    <script src="play.js" defer></script> 
+    <script type="module" src="play.js"></script> 
 </body>
 </html>
