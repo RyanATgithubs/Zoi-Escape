@@ -18,7 +18,7 @@
 }
 
 /* --- GAME WRAPPER --- */
-.unity-container {
+#unity-container {
     flex: 1 1 auto;
     background-color: yellow;
     display: flex;

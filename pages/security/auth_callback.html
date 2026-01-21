@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Authenticating...</title>
+</head>
+<body>
+	<h1>THIS IS THE REDIRECT URL</h1>
+	<script>
+        // 1. Get the token from the URL (Google puts it after the '#')
+        const params = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = params.get("access_token");
+
+        if (accessToken) {
+            // 2. Send token to the MAIN window (where your game is)
+            if (window.opener) {
+                window.opener.postMessage({ type: "GOOGLE_AUTH_SUCCESS", token: accessToken }, "*");
+            }
+        }
+        // 3. Close this popup immediately
+        window.close();
+    </script>
+</body>
+</html>

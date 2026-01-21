@@ -1,75 +1,88 @@
-// 1. PATH CONFIGURATION
-// Adjust this path to point to where your 'unity-build' folder is relative to this HTML file.
-var buildPath = "../../unity-build/Build"; 
+////////////////// 
+// Client Secrets
+const clientID = "716401733069-0123nu4bknhhc63a69pm3vpkcggsh9m5.apps.googleusercontent.com";
+const authURI = "https://accounts.google.com/o/oauth2/auth";
+const redirectURI = "https://ryanatgithubs.github.io/Zoi-Escape/pages/security/auth_callback.html";
 
-var loaderUrl = buildPath + "/unity-build.loader.js";
+////////////////// 
+// AUTHENTICATION
+const signinWindow = document.querySelector(".signin-window");
+const signinBttn = document.getElementById("google-signin-button");
+const authOverlay = document.getElementById("auth-overlay");
 
-// 2. DOM ELEMENTS
-var canvas = document.querySelector("#unity-canvas");
-var loadingBar = document.querySelector("#unity-loading-bar");
-var progressBarFull = document.querySelector("#unity-progress-bar-full");
-var fullScreenButton = document.querySelector("#full-screen-bttn");
-var warningBanner = document.querySelector("#unity-warning");
+let googleAuthPopup = null;
 
-// 3. ERROR BANNER FUNCTION
-function unityShowBanner(msg, type) {
-    function updateBannerVisibility() {
-        warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-    }
-    var div = document.createElement('div');
-    div.innerHTML = msg;
-    warningBanner.appendChild(div);
-    if (type == 'error') div.style = 'background: red; padding: 10px; color: white;';
-    else {
-        if (type == 'warning') div.style = 'background: yellow; padding: 10px; color: black;';
-        setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-        }, 5000);
-    }
-    updateBannerVisibility();
+signinBttn.addEventListener("click", StartGoogleSignIn);
+
+function StartGoogleSignIn() {
+	authOverlay.style.display = "flex";
+
+	const authURL = `${authURI}` +
+					`?client_id=${clientID}` +
+					`&redirect_uri=${encodeURIComponent(redirectURI)}` +
+					`&response_type=token` +
+                    `&scope=email profile`;
+
+    googleAuthPopup = window.open(authURL, "Google Auth", "width=500,height=600"); 
 }
 
-// 4. UNITY CONFIGURATION
-var config = {
-    dataUrl: buildPath + "/unity-build.data.unityweb",
-    frameworkUrl: buildPath + "/unity-build.framework.js.unityweb",
-    codeUrl: buildPath + "/unity-build.wasm.unityweb",
-    streamingAssetsUrl: "StreamingAssets",
-    companyName: "DefaultCompany",
-    productName: "Zoi_Escape",
-    productVersion: "1.0",
-    showBanner: unityShowBanner,
-    errorHandler: function(err, url, line) {
-        // Standard error handling
-        console.error("Unity Error:", err); 
-        return false; 
-    },
-};
+function OnSigninSuccess() {
+	if (googleAuthPopup) googleAuthPopup.close();
+	signinWindow.style.display = "none";
+	authOverlay.style.display = "none";
+	loadGame();
+}
 
-// 5. LOAD THE GAME
-// Show the loading bar immediately
-loadingBar.style.display = "block";
+function OnSignOut() {
+	signinWindow.style.display = "block";
+}
 
-var script = document.createElement("script");
-script.src = loaderUrl;
-script.onload = () => {
-    createUnityInstance(canvas, config, (progress) => {
-        // Update the width of the blue bar
-        progressBarFull.style.width = 100 * progress + "%";
-    })
-    .then((unityInstance) => {
-        // GAME LOADED SUCCESS
-        loadingBar.style.display = "none";
-        
-        // Activate the Full Screen Button
-        fullScreenButton.onclick = () => {
-            unityInstance.SetFullscreen(1);
-        };
-    })
-    .catch((message) => {
-        alert(message);
-    });
-};
+function CancelSignin() {
+	if (googleAuthPopup) googleAuthPopup.close();
+	if (signinWindow === null) console.log("signin window is null");
+	authOverlay.style.display = "none";
+	signinWindow.style.display = "block";
+}
 
-document.body.appendChild(script);
+window.addEventListener("message", (event) => {
+	if (event.data.type = "GOOGLE_AUTH_SUCCESS") {
+		OnSigninSuccess();
+		console.log("Signin success");
+	}
+}, false);
+
+/////////
+// UNITY
+const unityCanvas = `
+				<canvas id="unity-canvas"></canvas>
+                <div id="unity-loading-bar">
+                    <div id="unity-logo"></div>
+                    <div id="unity-progress-bar-empty">
+                        <div id="unity-progress-bar-full"></div>
+                    </div>
+                </div>
+
+                <div id="unity-warning"></div>
+
+                <div id="unity-footer">
+                    <button id="full-screen-bttn">Expand</button> 
+                </div>
+				<script src="game-loader.js" defer></script>
+				`;
+
+const unityContainer = document.getElementById("unity-container");
+
+function createHtmlElement(html) {
+	const template = document.createElement("template");
+	template.innerHTML = html.trim();
+	return template.content;
+}
+ 
+function loadGame() {
+	unityContainer.appendChild(createHtmlElement(unityCanvas));
+
+	const gameLoader = document.createElement("script");
+	gameLoader.src = "game-loader.js";
+	gameLoader.defer = true;
+	document.body.appendChild(gameLoader);
+}
