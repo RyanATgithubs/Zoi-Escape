@@ -1,14 +1,124 @@
-#unity-container { position: absolute }
-#unity-container.unity-desktop { left: 50%; top: 50%; transform: translate(-50%, -50%) }
-#unity-container.unity-mobile { position: fixed; width: 100%; height: 100% }
-.unity-mobile #unity-canvas { width: 100%; height: 100% }
-#unity-loading-bar { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none }
-#unity-logo { width: 154px; height: 130px; background: url('unity-logo-dark.png') no-repeat center }
-#unity-progress-bar-empty { width: 141px; height: 18px; margin-top: 10px; margin-left: 6.5px; background: url('progress-bar-empty-dark.png') no-repeat center }
-#unity-progress-bar-full { width: 0%; height: 18px; margin-top: 10px; background: url('progress-bar-full-dark.png') no-repeat center }
-#unity-footer { position: relative }
-.unity-mobile #unity-footer { display: none }
-#unity-logo-title-footer { float:left; width: 102px; height: 38px; background: url('unity-logo-title-footer.png') no-repeat center }
-#unity-build-title { float: right; margin-right: 10px; line-height: 38px; font-family: arial; font-size: 18px }
-/*#unity-fullscreen-button { cursor:pointer; float: right; width: 38px; height: 38px; background: url('fullscreen-button.png') no-repeat center }*/
-#unity-warning { position: absolute; left: 50%; top: 5%; transform: translate(-50%); background: white; padding: 10px; display: none }
+/* --- UNITY LOADING BAR (WRAPPER) --- */
+/* Ensure the parent overlay uses Flexbox to center everything dynamically */
+#unity-loading-bar {
+    position: absolute; /* Floats on top of canvas */
+    inset: 0;           /* Top/Right/Bottom/Left = 0. Fills the viewport. */
+    
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- UNITY LOGO --- */
+#unity-logo {
+    /* Dynamic Width: Controls size relative to the container */
+    width: 15%; 
+    min-width: 80px;  /* Prevent becoming invisible on tiny screens */
+    max-width: 300px; /* Prevent becoming absurdly large */
+    
+    aspect-ratio: 1 / 1; 
+
+    background-image: url('unity-logo-dark.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain; 
+    
+    /* Dynamic Spacing: Distance between logo and bar scales with height */
+    margin-bottom: 2%; 
+}
+
+/* --- PROGRESS BAR (CONTAINER) --- */
+#unity-progress-bar-empty {
+    /* 1. Positioning Context */
+    position: relative; /* Essential for aligning the child 'full' bar */
+    
+    /* 2. Sizing */
+    width: 20%;        
+    min-width: 150px;
+    max-width: 600px;
+    
+    /* 3. Shape Handling */
+    /* TRICK: Replace 10/1 with your image's EXACT pixel width / height 
+       Example: If image is 500px wide and 40px tall, use 500 / 40 */
+    aspect-ratio: 10 / 1; 
+    height: auto; 
+
+    /* 4. Background Handling */
+    background: url('progress-bar-empty-dark.png') no-repeat center;
+    
+    /* FIX: Change 'contain' to '100% 100%' 
+       This forces the empty bar image to fill the div exactly, 
+       removing any gap between the div edge and the image. */
+    background-size: 100% 100%; 
+}
+
+/* --- PROGRESS BAR (FILL) --- */
+#unity-progress-bar-full {
+    /* 1. Lock Position */
+    /* Use Absolute to sit perfectly on top of the parent's coordinates */
+    position: absolute; 
+    top: 0;
+    left: 0;
+    bottom: 0; /* Ensures height is locked to parent */
+    
+    /* 2. Width Logic */
+    width: 0%; /* Unity Loader JS changes this from 0% to 100% */
+    
+    /* 3. Background Handling */
+    background: url('progress-bar-full-dark.png') no-repeat left center;
+    
+    /* MATCHING FIX: Ensure this matches the parent's sizing logic exactly */
+    background-size: 100% 100%; 
+    
+    transition: width 0.2s linear;
+}
+
+/* --- UNITY ERROR / ALERT --- */
+#unity-warning {
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    transform: translate(-50%);
+    
+    width: 80%; /* Dynamic width */
+    max-width: 600px;
+    
+    background: white;
+    padding: 1em; /* Relative padding */
+    text-align: center;
+    
+    /* Dynamic Text Size */
+    font-size: clamp(12px, 1.5vw, 16px);
+    
+    display: none;
+}
+
+/* --- UNITY FOOTER --- */
+#unity-footer {
+    /* No 'position: absolute'. This keeps it in the document flow below the game */
+    width: 100%;
+    
+    /* Dynamic Height based on content (padding) */
+    padding: 10px 0; 
+    
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background: #333;
+}
+
+#full-screen-bttn {
+    width: fit-content;
+    /* Removed typo 'heightL' */
+    
+    /* Dynamic Margin/Padding */
+    margin-right: 2%; 
+    padding: 0.5em 1.5em; 
+    
+    /* Dynamic Font Size: Scales between 12px and 20px based on screen width */
+    font-size: clamp(5px, 1.5vw, 16px);
+    
+    cursor: pointer;
+}

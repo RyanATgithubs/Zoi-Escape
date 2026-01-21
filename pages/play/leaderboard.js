@@ -64,10 +64,10 @@ expandButton.addEventListener("click", function() {
 function toggleLeaderBoard() {
   if (isExpanded) {
     leaderboardBody.style.height = minimizedHeight;
-    expandButton.textContent = "▼";
+    expandButton.textContent = "▲";
   } else {
     leaderboardBody.style.height = expandedHeight;
-    expandButton.textContent = "▲";
+    expandButton.textContent = "▼";
   }
 
   isExpanded = !isExpanded;

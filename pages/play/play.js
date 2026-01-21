@@ -1,36 +1,19 @@
 ////////////////// 
-// Client Secrets
-const clientID = "716401733069-0123nu4bknhhc63a69pm3vpkcggsh9m5.apps.googleusercontent.com";
-const authURI = "https://accounts.google.com/o/oauth2/auth";
-const redirectURI = "https://ryanatgithubs.github.io/Zoi-Escape/pages/security/auth_callback.html";
-
-////////////////// 
 // AUTHENTICATION
 const signinWindow = document.querySelector(".signin-window");
-const signinBttn = document.getElementById("google-signin-button");
-const cancelSigninBttn = document.getElementById("cancel-signin-button");
+const signinBttn = document.querySelector(".gsi-material-button");
 
 const unityContainer = document.getElementById("unity-container");
 
-let googleAuthPopup = null;
-
+import { StartGoogleSignIn, CheckAuthSession } from "./../security/authenticator.js";
 signinBttn.addEventListener("click", StartGoogleSignIn);
-cancelSigninBttn.addEventListener("click", CancelSignin);
 
-function StartGoogleSignIn() {
+window.addEventListener("load", CheckAuthSession); // Check for saved session immediately
 
-	const authURL = `${authURI}` +
-					`?client_id=${clientID}` +
-					`&redirect_uri=${encodeURIComponent(redirectURI)}` +
-					`&response_type=token` +
-                    `&scope=email profile`;
-
-    googleAuthPopup = window.open(authURL, "Google Auth", "width=500,height=600"); 
-}
 
 function OnSigninSuccess() {
-	openSigninWindow(false);
 	openGameWindow();
+	openSigninWindow(false);
 }
 
 function OnSignOut() {
@@ -38,15 +21,11 @@ function OnSignOut() {
 	closeGameWindow();
 }
 
-function CancelSignin() {
-	if (googleAuthPopup) googleAuthPopup.close();
-	openSigninWindow(true);
-}
-
+////////////////////////////////////
+// AUTH CALLBACK LISTENER
 window.addEventListener("message", (event) => {
 	if (event.data.type === "GOOGLE_AUTH_SUCCESS") {
 		OnSigninSuccess();
-		console.log("Signin success");
 	}
 }, false);
 

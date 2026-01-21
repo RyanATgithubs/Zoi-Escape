@@ -4,7 +4,6 @@
     /* Let the height be determined by the 16:9 ratio of the children */
     height: fit-content; 
     padding: 10px;
-    background-color: black;
 
     display: flex;
     flex-direction: column; /* Stack Game on top of Leaderboard */
@@ -12,32 +11,42 @@
     justify-content: space-between;
     gap: 50px;
 }
-
-.google-signin {
-    display: none;
+/* --- SIGN IN --- */
+.gsi-material-button {
+    display: flex;
+    justify-self: center;
+    align-items: center;
 }
 
 /* --- GAME WRAPPER --- */
 #unity-container {
-    flex: 1 1 auto;
-    background-color: yellow;
+    width: 70%;
+    max-width: 1280px; /* Optional: Stop it from getting too wide on 4k screens */
+    margin: 0 auto;    /* Center the whole player */
+    
+    /* Flex Column stacks the Game Viewport on top of the Footer */
     display: none;
-    flex-direction: column;
-    width: 100%;
+    flex-direction: column; 
+
+    background: #232323; /* Background for the whole container */
 }
+
+#game-viewport {
+    position: relative; /* Establishes boundaries for absolute children */
+    width: 100%;
+    
+    /* Enforce 16:9 Ratio. Height is calculated automatically based on width */
+    aspect-ratio: 16 / 9; 
+
+    overflow: hidden; /* prevents canvas corners from poking out */
+}
+
 
 /* --- UNITY CONTAINER --- */
 #unity-canvas {
-    /* 1. Establish the Container Ratio */
+    display: block; /* Removes default inline spacing */
     width: 100%;
-    height: auto; /* Height is calculated from the aspect-ratio */
-    aspect-ratio: 16 / 9;
-    
-    background-color: darkcyan;
-    display: flex;
-    justify-content: center; /* Center the canvas if it loads slowly */
-    align-items: center;
-    overflow: hidden; /* Cut off anything that bleeds out */
+    height: 100%;   /* Fills the 16:9 viewport completely */
 }
 
 /* --- CRITICAL FIX: UNITY CANVAS --- */
@@ -49,7 +58,7 @@
 
 /* --- RESPONSIVE FIX --- */
 @media (max-width: 1100px) {
-    .unity-container {
+    #unity-container {
         /* CHANGED: Do not force fixed pixels (1024px) on small screens.
            Use 100% so it shrinks while keeping 16:9. */
         width: 100%;
@@ -57,24 +66,6 @@
     }
 }
 
-@media (max-width: 768px) {
-	.unity-container {
-		display: none;
-	}
-}
-
-#full-screen-bttn {
-    padding: 10px;
-}
-
 .leaderboard {
     max-width: fit-content;
-}
-
-#full-screen-bttn {
-	width: fit-content;
-	heightL font: inherit;
-	padding: 10px;
-	margin: 20px;
-	align-self: flex-end;
 }

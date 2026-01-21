@@ -52,7 +52,7 @@ const config = {
 // 6. LOAD THE GAME
 export function loadGame() {
     if (unityInstance) return;
-    loadingBar.style.display = "block";
+    loadingBar.style.display = "flex";
 
     loaderScript = document.createElement("script");
     loaderScript.src = loaderUrl;
