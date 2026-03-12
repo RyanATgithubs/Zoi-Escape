@@ -1,38 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="pages/main/style.css">
-	<link rel="shortcut icon" href="assets/zoi-escape-favicon.ico">
-	<title>Zoi: Escape</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./Assets/_Scripts/Styles/gsi-material-button.css">
+    <link rel="stylesheet" href="./output.css">
+    <link rel="icon" type="image/x-icon" href="./Assets/Art/Icons/zoi-escape-favicon.ico">
+    <script type="module" src="./Assets/_Scripts/JavaScript/Components/TabController.js" defer></script>
+    <title>Zoi-Escape</title>
 </head>
-<body>
-	<nav>
-		<a href="index.html">Home</a>
-		<ul>
-			<li><a href="pages/story/story.html">Story</a></li>
-			<li><a href="pages/char-info/char-info.html">Character Information</a></li>
-			<li><a href="pages/play/play.html">Play</a></li>
-			<li><a href="pages/about/abt-dev.html">About the Developer</a></li>
-		</ul>
-	</nav>
-	<Section>
-		<h1>Home</h1>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		</p>
-	</Section>
+
+<body class="bg-zinc-950 m-0 p-0 overflow-y-scroll">
+    <div class="main-layout w-full aspect-[8/9] bg-zoi-layout bg-top bg-no-repeat bg-[length:100%_auto] relative flex flex-col overflow-hidden">
+
+        <header class="flex w-full flex-row items-center justify-between px-10 py-2 border-b border-transparent gap-10 shrink-0">
+            <h1 id="tab-title" class="px-2 py-5 ease-in-out duration-200 transition-all text-amber-400 font-karantina text-2xl md:text-size-button lg:text-4xl whitespace-nowrap tracking-wide">
+                ZOI ESCAPE
+            </h1>
+            <tab-controller></tab-controller>
+        </header>
+
+        <main id="view-container" class="px-10 py-10 flex-1 overflow-y-auto">
+            
+            </main>
+    </div>
 </body>
 </html>

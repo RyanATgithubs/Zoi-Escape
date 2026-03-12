@@ -1,0 +1,37 @@
+@font-face {
+    font-family: "Karantina-Regular";
+    src: url("./Assets/Fonts/Karantina/Karantina-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "KoHo-SemiBold";
+    src: url("./Assets/Fonts/KoHo/KoHo-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "KoHo-Medium";
+    src: url("./Assets/Fonts/KoHo/KoHo-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "KoHo-Regular";
+    src: url("./Assets/Fonts/KoHo/KoHo-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply h-screen w-screen bg-zoi-main overflow-hidden bg-cover bg-top bg-no-repeat bg-slate-900;
+    }
+}
