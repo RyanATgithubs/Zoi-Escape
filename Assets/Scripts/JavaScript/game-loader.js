@@ -1,4 +1,4 @@
-// Assets/_Scripts/JavaScript/game-loader.js
+// Assets/Scripts/JavaScript/game-loader.js
 
 let unityInstance = null;
 let loaderScript = null;
