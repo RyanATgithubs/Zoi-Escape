@@ -2,7 +2,7 @@
 // Client Details
 const clientID = "716401733069-0123nu4bknhhc63a69pm3vpkcggsh9m5.apps.googleusercontent.com";
 const authURI = "https://accounts.google.com/o/oauth2/auth";
-const redirectURI = "https://ryanatgithubs.github.io/Zoi-Escape/Views/auth_callback.html";
+const redirectURI = "https://ryanatgithubs.github.io/Zoi-Escape/Views/auth-callback.html";
 
 let googleAuthPopup = null;
 
