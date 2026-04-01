@@ -3,7 +3,7 @@
 let unityInstance = null;
 let loaderScript = null;
 
-const buildPath = "/unity-build/Build"; 
+const buildPath = "unity-build/Build"; 
 const loaderUrl = buildPath + "/unity-build.loader.js";
 
 export function loadGame() {
